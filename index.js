@@ -26,21 +26,23 @@ io.on("connection", (socket) => {
   });
 
   socket.on("joinRoom", (data) => {
+    console.log("User joined room:", data);
     users.push(data);
-    io.emit("userJoined", users);
+    io.emit("userJoined", users); // Emit to all connected clients
   });
 
-  socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
-    const index = users.findIndex((user) => user.socketID === socket.id);
+  socket.on("userDisconnect", (socket_Id) => {
+    console.log(`User disconnected: ${socket_Id}`);
+    const index = users.findIndex((user) => user.socketId === socket_Id);
     console.log(`This is Index : ${index}`);
     if (index !== -1) {
       // Remove the disconnected user from the active user list
       users.splice(index, 1);
-
       // Emit the updated active user list to all connected clients
       io.emit("userJoined", users);
     }
+    // Log the updated list of active users
+    console.log("Active users:", users);
   });
 });
 

@@ -72,14 +72,29 @@ const saveMessage = async (req, res) => {
   }
 };
 
-const messagelist = async (req, res) => {
+const filterMessagelist = async (req, res) => {
   try {
     const { page } = req.params;
-    const result = await Chat.messagelist(page);
+    const result = await Chat.filterMessagelist(page);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { createUser, userLogin, saveMessage, messagelist };
+const messageList = async (req, res) => {
+  try {
+    const result = await Chat.messageList();
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createUser,
+  userLogin,
+  saveMessage,
+  filterMessagelist,
+  messageList,
+};

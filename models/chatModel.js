@@ -79,7 +79,7 @@ const saveMessage = async (
   }
 };
 
-const messagelist = async (page) => {
+const filterMessagelist = async (page) => {
   try {
     const PAGE_SIZE = 10; // Number of messages per page
     const offset = (page - 1) * PAGE_SIZE; // Calculate offset based on the current page
@@ -99,4 +99,25 @@ const messagelist = async (page) => {
   }
 };
 
-module.exports = { newUser, userLogin, saveMessage, messagelist };
+const messageList = async (req, res) => {
+  try {
+    const sql = `
+      SELECT *
+      FROM message
+      ORDER BY timestamp ASC
+    `;
+    const messages = await db.query(sql);
+    return messages;
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    throw error;
+  }
+};
+
+module.exports = {
+  newUser,
+  userLogin,
+  saveMessage,
+  filterMessagelist,
+  messageList,
+};
